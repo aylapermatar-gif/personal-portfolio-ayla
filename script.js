@@ -1,100 +1,62 @@
-
-// =========================
-// MOBILE NAVIGATION
-// =========================
-
-const menuToggle = document.getElementById("menu-toggle");
-const navMenu = document.getElementById("nav-menu");
+// NAVBAR ACTIVE LINK
 const navLinks = document.querySelectorAll(".nav-link");
 
-// Membuka dan menutup menu
-menuToggle.addEventListener("click", function () {
-
-    navMenu.classList.toggle("show");
-
-    const isOpen = navMenu.classList.contains("show");
-
-    menuToggle.setAttribute("aria-expanded", isOpen);
-
-    menuToggle.innerHTML = isOpen ? "&times;" : "☰";
-});
-
-// Menutup menu setelah link diklik
 navLinks.forEach(function(link) {
-
     link.addEventListener("click", function() {
+        navLinks.forEach(function(nav) {
+            nav.classList.remove("active");
+        });
 
-        navMenu.classList.remove("show");
+        this.classList.add("active");
 
-        menuToggle.setAttribute("aria-expanded", "false");
+        // Tutup menu navbar pada layar mobile
+        const navbarMenu = document.getElementById("navbarMenu");
 
-        menuToggle.innerHTML = "☰";
-
+        if (navbarMenu.classList.contains("show")) {
+            const bsCollapse = bootstrap.Collapse.getOrCreateInstance(navbarMenu);
+            bsCollapse.hide();
+        }
     });
-
 });
 
 
-// =========================
-// ACTIVE NAVIGATION
-// =========================
-
-const sections = document.querySelectorAll("main section");
+// SCROLL ANIMATION
+const sections = document.querySelectorAll("section");
 
 window.addEventListener("scroll", function() {
-
-    let current = "";
+    let currentSection = "";
 
     sections.forEach(function(section) {
+        const sectionTop = section.offsetTop - 150;
+        const sectionHeight = section.offsetHeight;
 
-        const sectionTop = section.offsetTop - 120;
-
-        if (window.scrollY >= sectionTop) {
-            current = section.getAttribute("id");
+        if (
+            window.scrollY >= sectionTop &&
+            window.scrollY < sectionTop + sectionHeight
+        ) {
+            currentSection = section.getAttribute("id");
         }
-
     });
 
     navLinks.forEach(function(link) {
-
         link.classList.remove("active");
 
-        if (link.getAttribute("href") === "#" + current) {
+        if (link.getAttribute("href") === "#" + currentSection) {
             link.classList.add("active");
         }
-
     });
-
 });
 
 
-// =========================
-// CONTACT FORM
-// =========================
+// CONTACT EMAIL
+const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
 
-const contactForm = document.getElementById("contact-form");
-const formStatus = document.getElementById("form-status");
-
-contactForm.addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    const name = document.getElementById("name").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const subject = document.getElementById("subject").value.trim();
-    const message = document.getElementById("message").value.trim();
-
-    if (!name || !email || !subject || !message) {
-
-        formStatus.textContent = "Mohon lengkapi semua data!";
-        return;
-
-    }
-
-    formStatus.textContent =
-        "Terima kasih, " + name +
-        "! Formulir berhasil diperiksa. Silakan hubungi saya melalui email untuk mengirim pesan.";
-
-    contactForm.reset();
-
+emailLinks.forEach(function(link) {
+    link.addEventListener("click", function() {
+        console.log("Opening email application...");
+    });
 });
+
+
+// CONSOLE MESSAGE
+console.log("Welcome to Ayla's Personal Portfolio!");
